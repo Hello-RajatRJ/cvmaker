@@ -94,7 +94,7 @@ function ResumeBuilderContent() {
       if (stored) {
         const parsed: string[] = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setUnlockedTemplateIds((prev: any) => Array.from(new Set([...prev, ...parsed])));
+          setUnlockedTemplateIds((prev: any) => Array.from(new Set([...FREE_TEMPLATE_IDS, ...prev, ...parsed])));
         }
       }
     } catch (e) {
@@ -107,7 +107,7 @@ function ResumeBuilderContent() {
       .then((data) => {
         if (data.authenticated && data.user?.unlockedTemplates) {
           setUnlockedTemplateIds((prev: any) =>
-            Array.from(new Set([...prev, ...data.user.unlockedTemplates]))
+            Array.from(new Set([...FREE_TEMPLATE_IDS, ...prev, ...data.user.unlockedTemplates]))
           );
         }
       })

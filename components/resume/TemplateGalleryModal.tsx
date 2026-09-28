@@ -50,7 +50,8 @@ export default function TemplateGalleryModal({
   if (!isOpen) return null;
 
   const categories = [
-    { id: 'all', name: 'All Templates (100)' },
+    { id: 'all', name: `All Templates (${TEMPLATE_CONFIGS.length})` },
+    { id: 'free', name: `Free (${FREE_TEMPLATE_IDS.length})` },
     { id: 'ats-safe', name: 'ATS Safe' },
     { id: 'developer', name: 'Developer & Tech' },
     { id: 'executive', name: 'Executive' },
@@ -65,7 +66,12 @@ export default function TemplateGalleryModal({
     const matchesSearch =
       t.name.toLowerCase().includes(search.toLowerCase()) ||
       t.description.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || t.category === selectedCategory;
+    const matchesCategory =
+      selectedCategory === 'all'
+        ? true
+        : selectedCategory === 'free'
+        ? !t.isPaid || FREE_TEMPLATE_IDS.includes(t.id)
+        : t.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -117,9 +123,9 @@ export default function TemplateGalleryModal({
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-xl font-extrabold text-slate-900">Multi-Template Gallery (100 Layouts)</h2>
+                <h2 className="text-xl font-extrabold text-slate-900">Multi-Template Gallery ({TEMPLATE_CONFIGS.length} Layouts)</h2>
                 <p className="text-xs font-semibold text-slate-500">
-                  Side-by-side layout selection • 2 Free templates for everyone, 98 Premium (₹50 each)
+                  Side-by-side layout selection • {FREE_TEMPLATE_IDS.length} Free templates for everyone, {TEMPLATE_CONFIGS.length - FREE_TEMPLATE_IDS.length} Premium (₹50 each)
                 </p>
               </div>
             </div>
