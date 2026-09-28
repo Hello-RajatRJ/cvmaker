@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LayoutGrid, Upload, Download, Sparkles, FileJson, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { LayoutGrid, Upload, Download, Sparkles, FileJson, FileText, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { ATSScoreBreakdown, TemplateConfig } from '../../types/resume';
 
 interface ResumeHeaderProps {
@@ -12,6 +12,7 @@ interface ResumeHeaderProps {
   onOpenATSPanel: () => void;
   onExportJSON: () => void;
   onExportPDF: () => void;
+  onExportDOC: () => void;
 }
 
 export default function ResumeHeader({
@@ -22,6 +23,7 @@ export default function ResumeHeader({
   onOpenATSPanel,
   onExportJSON,
   onExportPDF,
+  onExportDOC,
 }: ResumeHeaderProps) {
   const getGaugeColor = (score: number) => {
     if (score >= 80) return 'from-emerald-400 to-emerald-500 text-white shadow-emerald-500/20';
@@ -78,6 +80,15 @@ export default function ResumeHeader({
           >
             <FileJson className="w-4 h-4 text-slate-400" />
             <span className="hidden md:inline">JSON</span>
+          </button>
+
+          <button
+            onClick={onExportDOC}
+            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:border-blue-400 text-slate-700 hover:text-blue-600 text-xs font-bold transition-all shadow-sm"
+            title="Download editable Microsoft Word (.docx) document"
+          >
+            <FileText className="w-4 h-4 text-blue-600" />
+            <span>Word Docs</span>
           </button>
 
           <button

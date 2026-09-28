@@ -3,6 +3,7 @@
 import React from 'react';
 import { ResumeData, TemplateConfig } from '../../../types/resume';
 import { Globe, Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react';
+import { formatDate, formatDateRange } from '../../../utils/formatDate';
 
 interface ConfigurableTemplateProps {
   resume: ResumeData;
@@ -12,12 +13,8 @@ interface ConfigurableTemplateProps {
 export default function ConfigurableTemplate({ resume, config }: ConfigurableTemplateProps) {
   const accent = config.defaultAccent || '#1e3a5f';
 
-  const fontClass =
-    config.fontProfile === 'serif'
-      ? 'font-serif'
-      : config.fontProfile === 'mono'
-      ? 'font-mono text-[11px]'
-      : 'font-sans';
+  // Always use Calibri font across all templates
+  const fontClass = 'font-sans';
 
   const sectionOrder = resume.sectionOrder || ['summary', 'experience', 'education', 'projects', 'skills', 'certifications'];
 
@@ -25,14 +22,14 @@ export default function ConfigurableTemplate({ resume, config }: ConfigurableTem
     switch (key) {
       case 'summary':
         return resume.contact.summary ? (
-          <div key="summary" className="mb-6">
+          <div key="summary" className="mb-4">
             <h2
-              className="text-xs font-bold uppercase tracking-wider mb-1.5 pb-1 border-b"
+              className="text-xs font-bold uppercase tracking-wider mb-1 pb-1 border-b"
               style={{ color: accent, borderColor: `${accent}40` }}
             >
               Professional Summary
             </h2>
-            <p className="text-slate-700 leading-relaxed">{resume.contact.summary}</p>
+            <p className="text-slate-700 leading-relaxed text-justify">{resume.contact.summary}</p>
           </div>
         ) : null;
 
@@ -51,16 +48,19 @@ export default function ConfigurableTemplate({ resume, config }: ConfigurableTem
                   <div className="flex justify-between items-baseline">
                     <h3 className="font-extrabold text-slate-900 text-xs">{exp.position}</h3>
                     <span className="text-[10px] font-semibold text-slate-500">
-                      {exp.startDate} – {exp.current ? 'Present' : exp.endDate}
+                      {formatDateRange(exp.startDate, exp.endDate, exp.current)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-slate-700 font-medium text-[11px] mb-1.5">
                     <span>{exp.company}</span>
                     <span>{exp.location}</span>
                   </div>
-                  <ul className="list-disc list-inside space-y-1 text-slate-700 leading-relaxed">
+                  <ul className="space-y-1 text-slate-700 leading-relaxed mt-1.5">
                     {exp.highlights.map((bullet, idx) => (
-                      <li key={idx} className="pl-1">{bullet}</li>
+                      <li key={idx} className="flex items-start text-justify">
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-slate-700 mt-1.5 mr-2 shrink-0" />
+                        <span className="flex-1">{bullet}</span>
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -88,7 +88,7 @@ export default function ConfigurableTemplate({ resume, config }: ConfigurableTem
                     </p>
                   </div>
                   <span className="text-[10px] font-semibold text-slate-500">
-                    {edu.startDate} – {edu.endDate}
+                    {formatDate(edu.startDate)} – {formatDate(edu.endDate)}
                   </span>
                 </div>
               ))}
@@ -119,7 +119,7 @@ export default function ConfigurableTemplate({ resume, config }: ConfigurableTem
                     </div>
                     {(proj.startDate || proj.endDate) && (
                       <span className="text-[10px] font-semibold text-slate-500">
-                        {proj.startDate} {proj.endDate ? `– ${proj.endDate}` : ''}
+                        {formatDate(proj.startDate)} {proj.endDate ? `– ${formatDate(proj.endDate)}` : ''}
                       </span>
                     )}
                   </div>
@@ -144,9 +144,12 @@ export default function ConfigurableTemplate({ resume, config }: ConfigurableTem
                     <p className="text-slate-700 text-[11px] leading-relaxed pt-0.5">{proj.description}</p>
                   )}
                   {proj.highlights && proj.highlights.length > 0 && (
-                    <ul className="list-disc list-inside space-y-0.5 text-slate-700 text-[11px] leading-relaxed pt-1">
+                    <ul className="space-y-1 text-slate-700 text-[11px] leading-relaxed pt-1">
                       {proj.highlights.map((bullet, idx) => (
-                        <li key={idx} className="pl-1">{bullet}</li>
+                        <li key={idx} className="flex items-start text-justify">
+                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-slate-700 mt-1.5 mr-2 shrink-0" />
+                          <span className="flex-1">{bullet}</span>
+                        </li>
                       ))}
                     </ul>
                   )}
@@ -190,7 +193,7 @@ export default function ConfigurableTemplate({ resume, config }: ConfigurableTem
                 <div key={cert.id} className="p-2.5 rounded-lg border border-slate-200/80 bg-slate-50/50">
                   <p className="font-extrabold text-slate-900 text-xs">{cert.name}</p>
                   <p className="text-[11px] font-semibold text-slate-600 mt-0.5">
-                    {cert.issuer} • Issued {cert.date}
+                    {cert.issuer} • Issued {formatDate(cert.date)}
                   </p>
                 </div>
               ))}
@@ -207,19 +210,19 @@ export default function ConfigurableTemplate({ resume, config }: ConfigurableTem
     <div
       id="resume-preview-container"
       className={`resume-paper w-full min-h-[1050px] bg-white text-slate-900 shadow-2xl p-8 sm:p-10 ${fontClass} text-xs transition-all relative overflow-hidden`}
-      style={{ backgroundColor: config.bodyBg || '#ffffff' }}
+      style={{ backgroundColor: config.bodyBg || '#ffffff', fontFamily: "'Calibri', 'Carlito', 'Segoe UI', sans-serif" }}
     >
       {/* Dynamic Header Style */}
       {config.headerStyle === 'banner' ? (
         <div
-          className="-mx-8 -mt-8 sm:-mx-10 sm:-mt-10 p-8 mb-6 text-white"
+          className="-mx-8 -mt-8 sm:-mx-10 sm:-mt-10 p-8 mb-4 text-white"
           style={{ backgroundColor: accent }}
         >
           <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight">
             {resume.contact.fullName}
           </h1>
           <p className="text-sm font-semibold opacity-90 mt-1">{resume.contact.jobTitle}</p>
-          <div className="flex flex-wrap gap-4 text-[11px] opacity-80 mt-3">
+          <div className="flex flex-wrap gap-4 text-[11px] opacity-80 mt-2.5">
             {resume.contact.email && <span>📧 {resume.contact.email}</span>}
             {resume.contact.phone && <span>📞 {resume.contact.phone}</span>}
             {resume.contact.location && <span>📍 {resume.contact.location}</span>}
@@ -229,7 +232,7 @@ export default function ConfigurableTemplate({ resume, config }: ConfigurableTem
           </div>
         </div>
       ) : (
-        <div className={`mb-6 pb-4 ${config.headerStyle === 'centered' ? 'text-center' : 'text-left'}`}>
+        <div className={`mb-3 pb-2.5 border-b border-slate-200/80 ${config.headerStyle === 'centered' ? 'text-center' : 'text-left'}`}>
           <h1
             className="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight"
             style={{ color: accent }}
@@ -238,7 +241,7 @@ export default function ConfigurableTemplate({ resume, config }: ConfigurableTem
           </h1>
           <p className="text-sm font-bold text-slate-700 mt-0.5">{resume.contact.jobTitle}</p>
           <div
-            className={`flex flex-wrap gap-3 text-[11px] text-slate-600 mt-2 ${
+            className={`flex flex-wrap gap-2.5 text-[11px] text-slate-600 mt-1.5 ${
               config.headerStyle === 'centered' ? 'justify-center' : 'justify-start'
             }`}
           >

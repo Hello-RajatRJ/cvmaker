@@ -1,47 +1,32 @@
 {
   "app\\resume-builder\\page.tsx -> html2canvas": {
-    "id": 4457,
+    "id": "app\\resume-builder\\page.tsx -> html2canvas",
     "files": [
-      "static/chunks/ad2866b8.a1343deb0eef8820.js"
+      "static/chunks/_app-pages-browser_node_modules_html2canvas_dist_html2canvas_js.js"
     ]
   },
   "app\\resume-builder\\page.tsx -> jspdf": {
-    "id": 3375,
+    "id": "app\\resume-builder\\page.tsx -> jspdf",
     "files": [
-      "static/chunks/164f4fb6.f16aca3c313aa676.js",
-      "static/chunks/553.03fe61369feec170.js"
-    ]
-  },
-  "components\\assessment\\CertificateModal.tsx -> html2canvas": {
-    "id": 4457,
-    "files": [
-      "static/chunks/ad2866b8.a1343deb0eef8820.js"
-    ]
-  },
-  "components\\assessment\\CertificateModal.tsx -> jspdf": {
-    "id": 3375,
-    "files": [
-      "static/chunks/164f4fb6.f16aca3c313aa676.js",
-      "static/chunks/553.03fe61369feec170.js"
+      "static/chunks/_app-pages-browser_node_modules_jspdf_dist_jspdf_es_min_js.js"
     ]
   },
   "node_modules\\jspdf\\dist\\jspdf.es.min.js -> canvg": {
-    "id": 2396,
+    "id": "node_modules\\jspdf\\dist\\jspdf.es.min.js -> canvg",
     "files": [
-      "static/chunks/bc98253f.1fc75cbf78960dcb.js",
-      "static/chunks/969.2101285934631a69.js"
+      "static/chunks/_app-pages-browser_node_modules_canvg_lib_index_es_js.js"
     ]
   },
   "node_modules\\jspdf\\dist\\jspdf.es.min.js -> dompurify": {
-    "id": 1411,
+    "id": "node_modules\\jspdf\\dist\\jspdf.es.min.js -> dompurify",
     "files": [
-      "static/chunks/411.234bd1bd65a2d36f.js"
+      "static/chunks/_app-pages-browser_node_modules_dompurify_dist_purify_js.js"
     ]
   },
   "node_modules\\jspdf\\dist\\jspdf.es.min.js -> html2canvas": {
-    "id": 4457,
+    "id": "node_modules\\jspdf\\dist\\jspdf.es.min.js -> html2canvas",
     "files": [
-      "static/chunks/ad2866b8.a1343deb0eef8820.js"
+      "static/chunks/_app-pages-browser_node_modules_html2canvas_dist_html2canvas_js.js"
     ]
   }
 }

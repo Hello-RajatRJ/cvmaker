@@ -9,6 +9,11 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["'Calibri'", "'Carlito'", "'Segoe UI'", 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        serif: ["'Calibri'", "'Carlito'", 'Georgia', 'serif'],
+        mono: ["'Calibri'", "'Carlito'", 'ui-monospace', 'monospace'],
+      },
       colors: {
         brand: {
           50: '#f0f7ff',

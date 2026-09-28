@@ -1,5 +1,6 @@
 import { ResumeData, WorkExperience, Education, Project, SkillCategory, Certification } from '../types/resume';
 import { CVSemanticParser } from '../utils/cvSemanticParser';
+import { normalizeToMonthYear } from '../utils/formatDate';
 
 export class CVParserService {
   /**
@@ -73,8 +74,8 @@ export class CVParserService {
           company: e.company || e.companyName || e.organization || '',
           position: e.position || e.jobTitle || e.role || '',
           location: e.location || '',
-          startDate: e.startDate || e.start || '',
-          endDate: e.endDate || e.end || (e.current ? 'Present' : ''),
+          startDate: normalizeToMonthYear(e.startDate || e.start || ''),
+          endDate: normalizeToMonthYear(e.endDate || e.end || (e.current ? 'Present' : '')),
           current: Boolean(e.current || e.isCurrent || (e.endDate && /present|current/i.test(e.endDate))),
           highlights: Array.isArray(e.highlights) && e.highlights.length > 0
             ? e.highlights
@@ -93,8 +94,8 @@ export class CVParserService {
           institution: e.institution || e.school || e.university || e.college || '',
           degree: e.degree || e.qualification || '',
           fieldOfStudy: e.fieldOfStudy || e.field || e.major || '',
-          startDate: e.startDate || '',
-          endDate: e.endDate || '',
+          startDate: normalizeToMonthYear(e.startDate || ''),
+          endDate: normalizeToMonthYear(e.endDate || ''),
           gpa: e.gpa || e.grade || e.percentage || '',
           highlights: Array.isArray(e.highlights) ? e.highlights : [],
         }))
@@ -117,8 +118,8 @@ export class CVParserService {
           id: p.id || `proj-${Date.now()}-${idx + 1}`,
           name: p.name || p.title || p.projectName || '',
           role: p.role || '',
-          startDate: p.startDate || undefined,
-          endDate: p.endDate || undefined,
+          startDate: normalizeToMonthYear(p.startDate || '') || undefined,
+          endDate: normalizeToMonthYear(p.endDate || '') || undefined,
           link: p.link || p.url || p.projectUrl || '',
           repoLink: p.repoLink || p.github || p.githubUrl || '',
           technologies: Array.isArray(p.technologies) ? p.technologies : Array.isArray(p.techStack) ? p.techStack : [],

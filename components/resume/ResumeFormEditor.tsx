@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Plus, Trash2, Sparkles, User, Briefcase, GraduationCap, Code2, Award, ChevronDown, ChevronUp, GripVertical, ArrowLeft, ArrowRight, Layers } from 'lucide-react';
 import { ResumeData, WorkExperience, Education, Project, SkillCategory, Certification, SectionKey } from '../../types/resume';
 import { AIResumeService } from '../../services/aiResumeService';
+import { parseMonthYear, getMonthOptions, getYearOptions } from '../../utils/formatDate';
 import toast from 'react-hot-toast';
 
 interface ResumeFormEditorProps {
@@ -61,7 +62,7 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
       company: 'New Tech Corp',
       position: 'Senior Software Engineer',
       location: 'San Francisco, CA',
-      startDate: '2022-01',
+      startDate: 'Jan 2022',
       endDate: 'Present',
       current: true,
       highlights: ['Designed Next.js architecture increasing traffic by 30%.']
@@ -71,6 +72,11 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
 
   const updateExpField = (id: string, field: keyof WorkExperience, value: any) => {
     const updated = resume.experience.map((e) => (e.id === id ? { ...e, [field]: value } : e));
+    onChange({ ...resume, experience: updated });
+  };
+
+  const updateExpFields = (id: string, updates: Partial<WorkExperience>) => {
+    const updated = resume.experience.map((e) => (e.id === id ? { ...e, ...updates } : e));
     onChange({ ...resume, experience: updated });
   };
 
@@ -126,8 +132,8 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
       institution: 'University of California, Berkeley',
       degree: 'Bachelor of Science (B.S.)',
       fieldOfStudy: 'Computer Science & Engineering',
-      startDate: '2019-08',
-      endDate: '2023-05'
+      startDate: 'Aug 2019',
+      endDate: 'May 2023'
     };
     onChange({ ...resume, education: [...resume.education, newEdu] });
     toast.success('New Education entry added!');
@@ -172,7 +178,7 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
       id: `cert-${Date.now()}`,
       name: 'AWS Certified Solutions Architect – Professional',
       issuer: 'Amazon Web Services',
-      date: '2024-01'
+      date: 'Jan 2024'
     };
     onChange({ ...resume, certifications: [...(resume.certifications || []), newCert] });
   };
@@ -435,7 +441,9 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
               </button>
             </div>
 
-            {resume.experience.map((exp) => (
+            {resume.experience.map((exp) => {
+              const isCurrentlyWorking = Boolean(exp.current || exp.endDate?.toLowerCase() === 'present');
+              return (
               <div key={exp.id} className="p-4 bg-slate-50/50 border border-slate-200 rounded-xl space-y-3">
                 <div className="flex justify-between items-start">
                   <input
@@ -462,23 +470,102 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
                   />
 
                 <div className="grid grid-cols-2 gap-2">
+                  {/* Start Date - Month/Year Selectors */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Start Date</label>
+                    <div className="flex gap-1.5">
+                      <select
+                        value={parseMonthYear(exp.startDate).month}
+                        onChange={(e) => {
+                          const parsed = parseMonthYear(exp.startDate);
+                          const newDate = e.target.value && parsed.year ? `${e.target.value} ${parsed.year}` : e.target.value || parsed.year;
+                          updateExpField(exp.id, 'startDate', newDate);
+                        }}
+                        className="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                      >
+                        <option value="">Month</option>
+                        {getMonthOptions().map((m) => (
+                          <option key={m.value} value={m.value}>{m.label}</option>
+                        ))}
+                      </select>
+                      <select
+                        value={parseMonthYear(exp.startDate).year}
+                        onChange={(e) => {
+                          const parsed = parseMonthYear(exp.startDate);
+                          const newDate = parsed.month && e.target.value ? `${parsed.month} ${e.target.value}` : e.target.value || parsed.month;
+                          updateExpField(exp.id, 'startDate', newDate);
+                        }}
+                        className="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                      >
+                        <option value="">Year</option>
+                        {getYearOptions().map((y) => (
+                          <option key={y} value={y}>{y}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* End Date - Month/Year Selectors or Present */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">End Date</label>
+                    {isCurrentlyWorking ? (
+                      <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-2 text-xs font-bold text-indigo-700 text-center">
+                        Present
+                      </div>
+                    ) : (
+                      <div className="flex gap-1.5">
+                        <select
+                          value={parseMonthYear(exp.endDate).month}
+                          onChange={(e) => {
+                            const parsed = parseMonthYear(exp.endDate);
+                            const newDate = e.target.value && parsed.year ? `${e.target.value} ${parsed.year}` : e.target.value || parsed.year;
+                            updateExpField(exp.id, 'endDate', newDate);
+                          }}
+                          className="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                        >
+                          <option value="">Month</option>
+                          {getMonthOptions().map((m) => (
+                            <option key={m.value} value={m.value}>{m.label}</option>
+                          ))}
+                        </select>
+                        <select
+                          value={parseMonthYear(exp.endDate).year}
+                          onChange={(e) => {
+                            const parsed = parseMonthYear(exp.endDate);
+                            const newDate = parsed.month && e.target.value ? `${parsed.month} ${e.target.value}` : e.target.value || parsed.month;
+                            updateExpField(exp.id, 'endDate', newDate);
+                          }}
+                          className="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                        >
+                          <option value="">Year</option>
+                          {getYearOptions().map((y) => (
+                            <option key={y} value={y}>{y}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Currently Working Here Checkbox */}
+                <label className="flex items-center gap-2 cursor-pointer select-none">
                   <input
-                    type="text"
-                    value={exp.startDate && exp.endDate ? `${exp.startDate} – ${exp.current ? 'Present' : exp.endDate}` : exp.startDate || ''}
+                    type="checkbox"
+                    checked={isCurrentlyWorking}
                     onChange={(e) => {
-                      const val = e.target.value;
-                      const parts = val.split(/\s*[–-]\s*/);
-                      if (parts.length >= 2) {
-                        updateExpField(exp.id, 'startDate', parts[0].trim());
-                        updateExpField(exp.id, 'endDate', parts[1].trim());
-                        updateExpField(exp.id, 'current', parts[1].trim().toLowerCase() === 'present');
-                      } else {
-                        updateExpField(exp.id, 'startDate', val);
-                      }
+                      const isCurrent = e.target.checked;
+                      updateExpFields(exp.id, {
+                        current: isCurrent,
+                        endDate: isCurrent ? 'Present' : (exp.endDate?.toLowerCase() === 'present' ? '' : exp.endDate)
+                      });
                     }}
-                    className="bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all placeholder-slate-400"
-                    placeholder="Date (e.g. Jan 2022 – Present)"
+                    className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
                   />
+                  <span className="text-xs font-bold text-slate-700">Currently working here</span>
+                </label>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div></div>
                   <input
                     type="text"
                     value={exp.location}
@@ -524,7 +611,8 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
                   ))}
                 </div>
               </div>
-            ))}
+            );
+          })}
           </div>
         )}
 
@@ -607,31 +695,77 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
                   </div>
                 </div>
 
-                {/* Start Date & End Date */}
+                {/* Start Date & End Date - Month/Year Selectors */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-[10px] font-black text-slate-700 uppercase tracking-wider mb-1">
                       Start Date
                     </label>
-                    <input
-                      type="text"
-                      value={edu.startDate || ''}
-                      onChange={(e) => updateEduField(edu.id, 'startDate', e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all placeholder-slate-400"
-                      placeholder="e.g. Aug 2019 or 2019"
-                    />
+                    <div className="flex gap-1.5">
+                      <select
+                        value={parseMonthYear(edu.startDate).month}
+                        onChange={(e) => {
+                          const parsed = parseMonthYear(edu.startDate);
+                          const newDate = e.target.value && parsed.year ? `${e.target.value} ${parsed.year}` : e.target.value || parsed.year;
+                          updateEduField(edu.id, 'startDate', newDate);
+                        }}
+                        className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
+                      >
+                        <option value="">Month</option>
+                        {getMonthOptions().map((m) => (
+                          <option key={m.value} value={m.value}>{m.label}</option>
+                        ))}
+                      </select>
+                      <select
+                        value={parseMonthYear(edu.startDate).year}
+                        onChange={(e) => {
+                          const parsed = parseMonthYear(edu.startDate);
+                          const newDate = parsed.month && e.target.value ? `${parsed.month} ${e.target.value}` : e.target.value || parsed.month;
+                          updateEduField(edu.id, 'startDate', newDate);
+                        }}
+                        className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
+                      >
+                        <option value="">Year</option>
+                        {getYearOptions().map((y) => (
+                          <option key={y} value={y}>{y}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                   <div>
                     <label className="block text-[10px] font-black text-slate-700 uppercase tracking-wider mb-1">
                       End Date
                     </label>
-                    <input
-                      type="text"
-                      value={edu.endDate || ''}
-                      onChange={(e) => updateEduField(edu.id, 'endDate', e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all placeholder-slate-400"
-                      placeholder="e.g. May 2023 or Present"
-                    />
+                    <div className="flex gap-1.5">
+                      <select
+                        value={parseMonthYear(edu.endDate).month}
+                        onChange={(e) => {
+                          const parsed = parseMonthYear(edu.endDate);
+                          const newDate = e.target.value && parsed.year ? `${e.target.value} ${parsed.year}` : e.target.value || parsed.year;
+                          updateEduField(edu.id, 'endDate', newDate);
+                        }}
+                        className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
+                      >
+                        <option value="">Month</option>
+                        {getMonthOptions().map((m) => (
+                          <option key={m.value} value={m.value}>{m.label}</option>
+                        ))}
+                      </select>
+                      <select
+                        value={parseMonthYear(edu.endDate).year}
+                        onChange={(e) => {
+                          const parsed = parseMonthYear(edu.endDate);
+                          const newDate = parsed.month && e.target.value ? `${parsed.month} ${e.target.value}` : e.target.value || parsed.month;
+                          updateEduField(edu.id, 'endDate', newDate);
+                        }}
+                        className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
+                      >
+                        <option value="">Year</option>
+                        {getYearOptions().map((y) => (
+                          <option key={y} value={y}>{y}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -694,29 +828,73 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
                   </div>
                   <div>
                     <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Start Date</label>
-                    <input
-                      type="text"
-                      value={proj.startDate || ''}
-                      onChange={(e) => {
-                        const updated = resume.projects.map((p) => (p.id === proj.id ? { ...p, startDate: e.target.value } : p));
-                        onChange({ ...resume, projects: updated });
-                      }}
-                        className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all placeholder-slate-400"
-                      placeholder="e.g. 2024-01"
-                    />
+                    <div className="flex gap-1.5">
+                      <select
+                        value={parseMonthYear(proj.startDate).month}
+                        onChange={(e) => {
+                          const parsed = parseMonthYear(proj.startDate);
+                          const newDate = e.target.value && parsed.year ? `${e.target.value} ${parsed.year}` : e.target.value || parsed.year;
+                          const updated = resume.projects.map((p) => (p.id === proj.id ? { ...p, startDate: newDate } : p));
+                          onChange({ ...resume, projects: updated });
+                        }}
+                        className="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                      >
+                        <option value="">Month</option>
+                        {getMonthOptions().map((m) => (
+                          <option key={m.value} value={m.value}>{m.label}</option>
+                        ))}
+                      </select>
+                      <select
+                        value={parseMonthYear(proj.startDate).year}
+                        onChange={(e) => {
+                          const parsed = parseMonthYear(proj.startDate);
+                          const newDate = parsed.month && e.target.value ? `${parsed.month} ${e.target.value}` : e.target.value || parsed.month;
+                          const updated = resume.projects.map((p) => (p.id === proj.id ? { ...p, startDate: newDate } : p));
+                          onChange({ ...resume, projects: updated });
+                        }}
+                        className="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                      >
+                        <option value="">Year</option>
+                        {getYearOptions().map((y) => (
+                          <option key={y} value={y}>{y}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">End Date / Timeline</label>
-                    <input
-                      type="text"
-                      value={proj.endDate || ''}
-                      onChange={(e) => {
-                        const updated = resume.projects.map((p) => (p.id === proj.id ? { ...p, endDate: e.target.value } : p));
-                        onChange({ ...resume, projects: updated });
-                      }}
-                        className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all placeholder-slate-400"
-                      placeholder="e.g. Present"
-                    />
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">End Date</label>
+                    <div className="flex gap-1.5">
+                      <select
+                        value={parseMonthYear(proj.endDate).month}
+                        onChange={(e) => {
+                          const parsed = parseMonthYear(proj.endDate);
+                          const newDate = e.target.value && parsed.year ? `${e.target.value} ${parsed.year}` : e.target.value || parsed.year;
+                          const updated = resume.projects.map((p) => (p.id === proj.id ? { ...p, endDate: newDate } : p));
+                          onChange({ ...resume, projects: updated });
+                        }}
+                        className="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                      >
+                        <option value="">Month</option>
+                        {getMonthOptions().map((m) => (
+                          <option key={m.value} value={m.value}>{m.label}</option>
+                        ))}
+                      </select>
+                      <select
+                        value={parseMonthYear(proj.endDate).year}
+                        onChange={(e) => {
+                          const parsed = parseMonthYear(proj.endDate);
+                          const newDate = parsed.month && e.target.value ? `${parsed.month} ${e.target.value}` : e.target.value || parsed.month;
+                          const updated = resume.projects.map((p) => (p.id === proj.id ? { ...p, endDate: newDate } : p));
+                          onChange({ ...resume, projects: updated });
+                        }}
+                        className="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                      >
+                        <option value="">Year</option>
+                        {getYearOptions().map((y) => (
+                          <option key={y} value={y}>{y}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </div>
 
@@ -984,16 +1162,38 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
                     className="bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all placeholder-slate-400"
                     placeholder="Issuing Organization (e.g. Amazon Web Services)"
                   />
-                  <input
-                    type="text"
-                    value={cert.date}
-                    onChange={(e) => {
-                      const updated = (resume.certifications || []).map((c) => (c.id === cert.id ? { ...c, date: e.target.value } : c));
-                      onChange({ ...resume, certifications: updated });
-                    }}
-                    className="bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all placeholder-slate-400"
-                    placeholder="Issue Date (e.g. 2023-11)"
-                  />
+                  <div className="flex gap-1.5">
+                    <select
+                      value={parseMonthYear(cert.date).month}
+                      onChange={(e) => {
+                        const parsed = parseMonthYear(cert.date);
+                        const newDate = e.target.value && parsed.year ? `${e.target.value} ${parsed.year}` : e.target.value || parsed.year;
+                        const updated = (resume.certifications || []).map((c) => (c.id === cert.id ? { ...c, date: newDate } : c));
+                        onChange({ ...resume, certifications: updated });
+                      }}
+                      className="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                    >
+                      <option value="">Month</option>
+                      {getMonthOptions().map((m) => (
+                        <option key={m.value} value={m.value}>{m.label}</option>
+                      ))}
+                    </select>
+                    <select
+                      value={parseMonthYear(cert.date).year}
+                      onChange={(e) => {
+                        const parsed = parseMonthYear(cert.date);
+                        const newDate = parsed.month && e.target.value ? `${parsed.month} ${e.target.value}` : e.target.value || parsed.month;
+                        const updated = (resume.certifications || []).map((c) => (c.id === cert.id ? { ...c, date: newDate } : c));
+                        onChange({ ...resume, certifications: updated });
+                      }}
+                      className="flex-1 bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                    >
+                      <option value="">Year</option>
+                      {getYearOptions().map((y) => (
+                        <option key={y} value={y}>{y}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
             ))}

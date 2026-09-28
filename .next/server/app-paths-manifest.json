@@ -1,25 +1,5 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/api/ai/optimize/route": "app/api/ai/optimize/route.js",
-  "/assessment/test/[stackId]/page": "app/assessment/test/[stackId]/page.js",
-  "/assessment/admin/page": "app/assessment/admin/page.js",
-  "/assessment/page": "app/assessment/page.js",
   "/page": "app/page.js",
-  "/gemini-studio/page": "app/gemini-studio/page.js",
-  "/payment/gateway/page": "app/payment/gateway/page.js",
-  "/resume-builder/page": "app/resume-builder/page.js",
-  "/api/auth/logout/route": "app/api/auth/logout/route.js",
   "/api/auth/me/route": "app/api/auth/me/route.js",
-  "/api/ai/chat/route": "app/api/ai/chat/route.js",
-  "/api/auth/login/route": "app/api/auth/login/route.js",
-  "/api/auth/register/route": "app/api/auth/register/route.js",
-  "/api/auth/verify-email/route": "app/api/auth/verify-email/route.js",
-  "/api/razorpay/create-order/route": "app/api/razorpay/create-order/route.js",
-  "/api/auth/resend-otp/route": "app/api/auth/resend-otp/route.js",
-  "/api/razorpay/callback/route": "app/api/razorpay/callback/route.js",
-  "/api/razorpay/initiate-payment/route": "app/api/razorpay/initiate-payment/route.js",
-  "/api/razorpay/webhook/route": "app/api/razorpay/webhook/route.js",
-  "/api/razorpay/verify-payment/route": "app/api/razorpay/verify-payment/route.js",
-  "/api/parse-file/route": "app/api/parse-file/route.js",
-  "/api/parse-csv/route": "app/api/parse-csv/route.js"
+  "/resume-builder/page": "app/resume-builder/page.js"
 }

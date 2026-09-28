@@ -14,6 +14,7 @@ import { SAMPLE_RESUME_DATA } from '../../data/sampleResume';
 import { TEMPLATE_CONFIGS, FREE_TEMPLATE_IDS } from '../../data/templateConfigs';
 import { ResumeData, TemplateConfig } from '../../types/resume';
 import { AIResumeService } from '../../services/aiResumeService';
+import { exportResumeToDoc } from '../../utils/exportDoc';
 
 function ResumeBuilderContent() {
   const searchParams = useSearchParams();
@@ -129,23 +130,139 @@ function ResumeBuilderContent() {
     downloadAnchor.remove();
   };
 
+  const handleExportDOC = async () => {
+    const toastId = toast.loading('Generating Word (.docx) document...');
+    try {
+      await exportResumeToDoc(resumeData, activeTemplate);
+      toast.success('🎉 Word Docs (.docx) downloaded successfully!', { id: toastId });
+    } catch (e) {
+      console.error('Word DOCX export error:', e);
+      toast.error('Failed to export Word document.', { id: toastId });
+    }
+  };
+
   const handleExportPDF = async () => {
+    const toastId = toast.loading('Generating high-res multi-page PDF...');
     try {
       const html2canvas = (await import('html2canvas')).default;
       const { jsPDF } = await import('jspdf');
 
       const element = document.getElementById('resume-preview-container');
-      if (!element) return;
+      if (!element) {
+        toast.error('Resume preview element not found.', { id: toastId });
+        return;
+      }
 
-      const canvas = await html2canvas(element, { scale: 2 });
-      const imgData = canvas.toDataURL('image/png');
+      // Capture full element at high resolution
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+
       const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      const a4WidthMm = 210;
+      const a4HeightMm = 297;
 
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+      // Equivalent pixel height for 1 A4 page at the rendered canvas width
+      const a4PxHeight = Math.floor((canvasWidth * a4HeightMm) / a4WidthMm);
+
+      // Smart page-break calculation based on DOM elements
+      const containerRect = element.getBoundingClientRect();
+      const scaleFactor = canvasHeight / element.offsetHeight;
+      const breakCandidates = Array.from(
+        element.querySelectorAll('h1, h2, h3, p, li, [data-section], .space-y-4 > div, .mb-6')
+      );
+
+      // Function to detect actual content height and ignore trailing blank whitespace/padding
+      const getContentBottom = (cvs: HTMLCanvasElement): number => {
+        const ctx = cvs.getContext('2d');
+        if (!ctx) return cvs.height;
+        try {
+          const imgData = ctx.getImageData(0, 0, cvs.width, cvs.height).data;
+          // Scan upwards from the bottom of the canvas
+          for (let y = cvs.height - 1; y >= 0; y -= 2) {
+            for (let x = 0; x < cvs.width; x += 4) {
+              const idx = (y * cvs.width + x) * 4;
+              const r = imgData[idx];
+              const g = imgData[idx + 1];
+              const b = imgData[idx + 2];
+              const a = imgData[idx + 3];
+              // Detect any non-white content pixel
+              if (a > 30 && (r < 240 || g < 240 || b < 240)) {
+                return Math.min(cvs.height, y + 25);
+              }
+            }
+          }
+        } catch (e) {}
+        return cvs.height;
+      };
+
+      const effectiveHeight = getContentBottom(canvas);
+
+      let renderedHeight = 0;
+      let pageIndex = 0;
+
+      // Only generate another page if there is substantial remaining content (avoid trailing empty page)
+      while (renderedHeight < effectiveHeight - 20) {
+        if (pageIndex > 0) {
+          pdf.addPage('a4', 'p');
+        }
+
+        const remainingHeight = effectiveHeight - renderedHeight;
+        let sliceHeight = Math.min(a4PxHeight, remainingHeight);
+
+        // Find clean split point to avoid cutting text/headers in half
+        if (renderedHeight + sliceHeight < effectiveHeight - 20) {
+          const idealCutY = renderedHeight + sliceHeight;
+          const minAllowedCutY = renderedHeight + (a4PxHeight * 0.72);
+
+          let bestCutY = idealCutY;
+          for (const cand of breakCandidates) {
+            const rect = cand.getBoundingClientRect();
+            const topY = (rect.top - containerRect.top) * scaleFactor;
+            const bottomY = (rect.bottom - containerRect.top) * scaleFactor;
+
+            if (topY < idealCutY && bottomY > idealCutY && topY > minAllowedCutY) {
+              bestCutY = topY - (6 * scaleFactor);
+              break;
+            }
+          }
+
+          sliceHeight = Math.max(20, bestCutY - renderedHeight);
+        }
+
+        // Create canvas slice for this page
+        const pageCanvas = document.createElement('canvas');
+        pageCanvas.width = canvasWidth;
+        pageCanvas.height = a4PxHeight;
+
+        const ctx = pageCanvas.getContext('2d');
+        if (ctx) {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+          ctx.drawImage(
+            canvas,
+            0, renderedHeight, canvasWidth, sliceHeight,
+            0, 0, canvasWidth, sliceHeight
+          );
+        }
+
+        const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.98);
+        pdf.addImage(pageImgData, 'JPEG', 0, 0, a4WidthMm, a4HeightMm, undefined, 'FAST');
+
+        renderedHeight += sliceHeight;
+        pageIndex++;
+      }
+
       pdf.save(`CV_${resumeData.contact.fullName.replace(/\s+/g, '_')}.pdf`);
+      toast.success(`🎉 PDF downloaded successfully (${pageIndex} pages)!`, { id: toastId });
     } catch (err) {
+      console.error('PDF generation error:', err);
+      toast.error('Direct PDF export encountered an issue. Opening print dialog...', { id: toastId });
       window.print();
     }
   };
@@ -160,6 +277,7 @@ function ResumeBuilderContent() {
         onOpenImport={() => setShowImportModal(true)}
         onOpenATSPanel={() => setShowATSModal(true)}
         onExportJSON={handleExportJSON}
+        onExportDOC={handleExportDOC}
         onExportPDF={handleExportPDF}
       />
 
