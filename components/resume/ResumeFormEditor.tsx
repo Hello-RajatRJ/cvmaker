@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, Trash2, Sparkles, User, Briefcase, GraduationCap, Code2, Award, ChevronDown, ChevronUp, GripVertical, ArrowLeft, ArrowRight, Layers, Globe, BookOpen, Heart, Trophy, Languages, AlertCircle, Check, Save } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { Plus, Trash2, Sparkles, User, Briefcase, GraduationCap, Code2, Award, ChevronDown, ChevronUp, GripVertical, ArrowLeft, ArrowRight, Layers, Globe, BookOpen, Heart, Trophy, Languages, AlertCircle, Check, Save, X } from 'lucide-react';
 import { ResumeData, WorkExperience, Education, Project, SkillCategory, Certification, Language, Award as AwardType, Publication, VolunteerExperience, SectionKey } from '../../types/resume';
 import { AIResumeService } from '../../services/aiResumeService';
 import { parseMonthYear, getMonthOptions, getYearOptions } from '../../utils/formatDate';
@@ -70,6 +70,117 @@ function FieldLabel({ label, required, optional }: { label: string; required?: b
       {required && <span className="text-rose-500 ml-0.5">*</span>}
       {optional && <span className="text-slate-400 ml-1 normal-case font-medium">(optional)</span>}
     </label>
+  );
+}
+
+// ─── Comma-Separated List Input Component ───
+interface CommaSeparatedInputProps {
+  values?: string[];
+  onChange: (items: string[]) => void;
+  className?: string;
+  placeholder?: string;
+  showBadges?: boolean;
+}
+
+function CommaSeparatedInput({
+  values,
+  onChange,
+  className,
+  placeholder,
+  showBadges = false,
+}: CommaSeparatedInputProps) {
+  const [text, setText] = useState(() => (values || []).join(', '));
+  const isFocusedRef = useRef(false);
+  const lastSentRef = useRef((values || []).join('|#|'));
+
+  useEffect(() => {
+    const incoming = (values || []).join('|#|');
+    if (!isFocusedRef.current) {
+      setText((values || []).join(', '));
+      lastSentRef.current = incoming;
+    } else if (incoming !== lastSentRef.current) {
+      // External update (e.g. AI ATS optimization or preset load)
+      setText((values || []).join(', '));
+      lastSentRef.current = incoming;
+    }
+  }, [values]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newText = e.target.value;
+    setText(newText);
+    const items = newText.split(',').map((s) => s.trim()).filter(Boolean);
+    lastSentRef.current = items.join('|#|');
+    onChange(items);
+  };
+
+  const handleBlur = () => {
+    isFocusedRef.current = false;
+    const items = text.split(',').map((s) => s.trim()).filter(Boolean);
+    const formatted = items.join(', ');
+    setText(formatted);
+    lastSentRef.current = items.join('|#|');
+    onChange(items);
+  };
+
+  const handleFocus = () => {
+    isFocusedRef.current = true;
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const items = text.split(',').map((s) => s.trim()).filter(Boolean);
+      const formatted = items.join(', ');
+      setText(formatted);
+      lastSentRef.current = items.join('|#|');
+      onChange(items);
+    }
+  };
+
+  const handleRemoveBadge = (indexToRemove: number) => {
+    const currentItems = values || [];
+    const updated = currentItems.filter((_, i) => i !== indexToRemove);
+    const newText = updated.join(', ');
+    setText(newText);
+    lastSentRef.current = updated.join('|#|');
+    onChange(updated);
+  };
+
+  const activeBadges = values || [];
+
+  return (
+    <div className="space-y-1.5">
+      <input
+        type="text"
+        value={text}
+        onChange={handleChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        className={className}
+        placeholder={placeholder}
+      />
+      {showBadges && activeBadges.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 pt-0.5">
+          {activeBadges.map((badge, idx) => (
+            <span
+              key={`${badge}-${idx}`}
+              className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-lime-50 border border-lime-200 text-slate-800 rounded-md text-[11px] font-bold shadow-2xs group"
+            >
+              <span>{badge}</span>
+              <button
+                type="button"
+                onClick={() => handleRemoveBadge(idx)}
+                className="text-slate-400 hover:text-rose-600 transition-colors cursor-pointer p-0.5 rounded"
+                title={`Remove ${badge}`}
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -715,12 +826,12 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
               </div>
               <div className="mt-3">
                 <FieldLabel label="Key Professional Strengths (comma-separated)" optional />
-                <input
-                  type="text"
-                  value={(resume.contact.keyStrengths || []).join(', ')}
-                  onChange={(e) => updateContact('keyStrengths', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+                <CommaSeparatedInput
+                  values={resume.contact.keyStrengths}
+                  onChange={(items) => updateContact('keyStrengths', items)}
                   className={inputClass}
                   placeholder="e.g. System Design, Team Leadership, Performance Optimization"
+                  showBadges
                 />
               </div>
             </details>
@@ -845,12 +956,13 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
                   {/* Technologies used */}
                   <div>
                     <FieldLabel label="Technologies / Tools Used (comma-separated)" optional />
-                    <input type="text" value={(exp.technologies || []).join(', ')}
-                      onChange={(e) => {
-                        const techArr = e.target.value.split(',').map(t => t.trim()).filter(Boolean);
-                        updateExpField(exp.id, 'technologies', techArr);
-                      }}
-                      className={inputClass} placeholder="React, TypeScript, AWS, Docker" />
+                    <CommaSeparatedInput
+                      values={exp.technologies}
+                      onChange={(techArr) => updateExpField(exp.id, 'technologies', techArr)}
+                      className={inputClass}
+                      placeholder="React, TypeScript, AWS, Docker"
+                      showBadges
+                    />
                   </div>
 
                   {/* Highlights / Bullets */}
@@ -995,15 +1107,23 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
                   <div className="space-y-3 pt-2">
                     <div>
                       <FieldLabel label="Relevant Coursework (comma-separated)" optional />
-                      <input type="text" value={(edu.coursework || []).join(', ')}
-                        onChange={(e) => updateEduField(edu.id, 'coursework', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
-                        className={inputClass} placeholder="Data Structures, Algorithms, Machine Learning" />
+                      <CommaSeparatedInput
+                        values={edu.coursework}
+                        onChange={(coursework) => updateEduField(edu.id, 'coursework', coursework)}
+                        className={inputClass}
+                        placeholder="Data Structures, Algorithms, Machine Learning"
+                        showBadges
+                      />
                     </div>
                     <div>
                       <FieldLabel label="Academic Achievements (comma-separated)" optional />
-                      <input type="text" value={(edu.academicAchievements || []).join(', ')}
-                        onChange={(e) => updateEduField(edu.id, 'academicAchievements', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
-                        className={inputClass} placeholder="Dean's List, Scholarship recipient" />
+                      <CommaSeparatedInput
+                        values={edu.academicAchievements}
+                        onChange={(achievements) => updateEduField(edu.id, 'academicAchievements', achievements)}
+                        className={inputClass}
+                        placeholder="Dean's List, Scholarship recipient"
+                        showBadges
+                      />
                     </div>
                     <div>
                       <FieldLabel label="Description" optional />
@@ -1089,13 +1209,16 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
 
                 <div>
                   <FieldLabel label="Tech Stack (comma-separated)" />
-                  <input type="text" value={(proj.technologies || []).join(', ')}
-                    onChange={(e) => {
-                      const techArr = e.target.value.split(',').map(t => t.trim()).filter(Boolean);
+                  <CommaSeparatedInput
+                    values={proj.technologies}
+                    onChange={(techArr) => {
                       const u = resume.projects.map(p => p.id === proj.id ? { ...p, technologies: techArr } : p);
                       onChange({ ...resume, projects: u });
                     }}
-                    className={inputClass} placeholder="React, Next.js, TypeScript" />
+                    className={inputClass}
+                    placeholder="React, Next.js, TypeScript"
+                    showBadges
+                  />
                 </div>
 
                 <div>
@@ -1187,22 +1310,17 @@ export default function ResumeFormEditor({ resume, onChange }: ResumeFormEditorP
 
                 <div>
                   <FieldLabel label="Skills (comma-separated)" />
-                  <input type="text" value={cat.skills.join(', ')}
-                    onChange={(e) => {
-                      const skillsArr = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                  <CommaSeparatedInput
+                    values={cat.skills}
+                    onChange={(skillsArr) => {
                       const u = resume.skills.map(s => s.id === cat.id ? { ...s, skills: skillsArr } : s);
                       onChange({ ...resume, skills: u });
                     }}
-                    className={inputClass} placeholder="React, TypeScript, Node.js, etc." />
+                    className={inputClass}
+                    placeholder="React, TypeScript, Node.js, etc."
+                    showBadges
+                  />
                 </div>
-
-                {cat.skills.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {cat.skills.map((s, i) => (
-                      <span key={i} className="px-2.5 py-0.5 bg-lime-50 border border-lime-200 text-slate-900 rounded-md text-[11px] font-extrabold shadow-2xs">{s}</span>
-                    ))}
-                  </div>
-                )}
               </div>
             ))}
           </div>
