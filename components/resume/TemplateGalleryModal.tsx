@@ -113,7 +113,7 @@ export default function TemplateGalleryModal({
           {/* Header */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-100">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shadow-sm">
+              <div className="w-10 h-10 rounded-2xl bg-lime-50 border border-lime-200 flex items-center justify-center text-lime-700 shadow-sm">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
@@ -141,8 +141,8 @@ export default function TemplateGalleryModal({
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors ${
                     selectedCategory === cat.id
-                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
-                      : 'bg-white text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 border border-transparent hover:border-indigo-100'
+                      ? 'bg-lime-400 text-slate-950 font-black shadow-md shadow-lime-500/25'
+                      : 'bg-white text-slate-600 hover:text-lime-700 hover:bg-lime-50 border border-transparent hover:border-lime-200'
                   }`}
                 >
                   {cat.name}
@@ -158,7 +158,7 @@ export default function TemplateGalleryModal({
                 placeholder="Search 100 templates..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder-slate-400"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-lime-500 focus:ring-1 focus:ring-lime-500 transition-all placeholder-slate-400"
               />
             </div>
           </div>
@@ -174,8 +174,8 @@ export default function TemplateGalleryModal({
                   key={template.id}
                   className={`group relative rounded-2xl border p-4 transition-all flex flex-col justify-between ${
                     isActive
-                      ? 'bg-indigo-50/70 border-indigo-400 shadow-lg shadow-indigo-500/10'
-                      : 'bg-white border-slate-200 hover:border-indigo-300 hover:shadow-md'
+                      ? 'bg-lime-50/70 border-lime-500 shadow-lg shadow-lime-500/15'
+                      : 'bg-white border-slate-200 hover:border-lime-300 hover:shadow-md'
                   }`}
                 >
                   {/* Visual Layout Card */}
@@ -188,7 +188,7 @@ export default function TemplateGalleryModal({
                         handleUnlockTemplate(template);
                       }
                     }}
-                    className="w-full h-80 rounded-xl border border-slate-200 bg-white overflow-hidden relative cursor-pointer group-hover:border-indigo-500 transition-all shadow-sm select-none mb-3"
+                    className="w-full h-80 rounded-xl border border-slate-200 bg-white overflow-hidden relative cursor-pointer group-hover:border-lime-500 transition-all shadow-sm select-none mb-3"
                   >
                     {/* Scaled ConfigurableTemplate document */}
                     <div className="w-[780px] min-h-[1050px] transform scale-[0.38] origin-top-left pointer-events-none p-1 bg-white">
@@ -197,7 +197,7 @@ export default function TemplateGalleryModal({
 
                     {/* Overlay Metadata Bar */}
                     <div className="absolute bottom-0 left-0 right-0 p-2.5 bg-white/95 backdrop-blur-md border-t border-slate-200 flex justify-between items-center text-[10px] text-slate-700 font-bold z-10 shadow-md">
-                      <span className="uppercase tracking-wider text-[9px] font-extrabold text-indigo-700">
+                      <span className="uppercase tracking-wider text-[9px] font-extrabold text-lime-800">
                         {template.layout} • {template.fontProfile}
                       </span>
                       {template.isPaid && !isUnlocked ? (
@@ -216,7 +216,7 @@ export default function TemplateGalleryModal({
                   {/* Details */}
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                      <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-lime-700 transition-colors">
                         {template.name}
                       </h3>
                       {isUnlocked ? (
@@ -241,8 +241,8 @@ export default function TemplateGalleryModal({
                       }}
                       className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 border ${
                         isActive
-                          ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/20'
-                          : 'bg-white hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 border-slate-200 hover:border-indigo-200'
+                          ? 'bg-lime-400 text-slate-950 font-black border-indigo-600 shadow-md shadow-lime-500/25'
+                          : 'bg-white hover:bg-lime-50 text-slate-700 hover:text-lime-800 border-slate-200 hover:border-lime-200'
                       }`}
                     >
                       {isActive && <Check className="w-3.5 h-3.5" />}

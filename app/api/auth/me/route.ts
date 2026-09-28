@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     const token = tokenMatch ? tokenMatch[1] : null;
 
     if (!token) {
-      return NextResponse.json({ authenticated: false }, { status: 401 });
+      return NextResponse.json({ authenticated: false, user: null }, { status: 200 });
     }
 
     const decoded = jwt.verify(token, JWT_SECRET) as any;
@@ -42,6 +42,6 @@ export async function GET(req: Request) {
       }
     });
   } catch (err) {
-    return NextResponse.json({ authenticated: false }, { status: 401 });
+    return NextResponse.json({ authenticated: false, user: null }, { status: 200 });
   }
 }

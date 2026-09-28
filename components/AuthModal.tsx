@@ -171,7 +171,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
       <div className="relative w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl p-7 overflow-hidden">
         {/* Decorative ambient background */}
-        <div className="absolute -top-24 -right-24 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-48 h-48 bg-lime-500/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-violet-500/20 rounded-full blur-3xl pointer-events-none" />
 
         <button
@@ -183,13 +183,13 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
 
         {/* Modal Header */}
         <div className="flex items-center space-x-3 mb-6">
-          <div className="w-11 h-11 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shadow-sm">
+          <div className="w-11 h-11 rounded-2xl bg-lime-500/20 border border-lime-500/30 flex items-center justify-center text-lime-400 shadow-sm">
             {mode === 'verify-otp' ? (
               <KeyRound className="w-5 h-5 text-amber-400" />
             ) : mode === 'register' ? (
-              <Sparkles className="w-5 h-5 text-indigo-400" />
+              <Sparkles className="w-5 h-5 text-lime-400" />
             ) : (
-              <Trophy className="w-5 h-5 text-indigo-400" />
+              <Trophy className="w-5 h-5 text-lime-400" />
             )}
           </div>
           <div>
@@ -241,7 +241,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                    className="w-12 h-14 bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 rounded-2xl text-center text-xl font-mono font-black text-white outline-none transition-all"
+                    className="w-12 h-14 bg-slate-950 border border-slate-800 focus:border-lime-500 focus:ring-2 focus:ring-lime-500/30 rounded-2xl text-center text-xl font-mono font-black text-white outline-none transition-all"
                   />
                 ))}
               </div>
@@ -250,7 +250,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
             <button
               type="submit"
               disabled={loading || otp.join('').length !== 6}
-              className="w-full py-3 rounded-2xl font-bold text-sm bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-xl shadow-indigo-500/25 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              className="w-full py-3 rounded-2xl font-bold text-sm bg-gradient-to-r from-lime-400 via-lime-500 to-lime-600 hover:from-lime-300 hover:to-lime-500 text-slate-950 font-black shadow-xl shadow-lime-500/25 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             >
               {loading ? (
                 <span>Verifying...</span>
@@ -267,7 +267,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                 type="button"
                 onClick={handleResendCode}
                 disabled={resending}
-                className="text-slate-400 hover:text-indigo-400 font-medium flex items-center space-x-1 transition-colors"
+                className="text-slate-400 hover:text-lime-400 font-medium flex items-center space-x-1 transition-colors"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${resending ? 'animate-spin' : ''}`} />
                 <span>Resend Code</span>
@@ -296,7 +296,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                     placeholder="Alex Rivera"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-2xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-2xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-lime-500 focus:ring-1 focus:ring-lime-500/50"
                   />
                 </div>
               </div>
@@ -312,7 +312,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   placeholder="alex.rivera@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-2xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-2xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-lime-500 focus:ring-1 focus:ring-lime-500/50"
                 />
               </div>
             </div>
@@ -327,7 +327,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-2xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-2xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-lime-500 focus:ring-1 focus:ring-lime-500/50"
                 />
               </div>
             </div>
@@ -335,7 +335,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-2xl font-bold text-sm bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-xl shadow-indigo-500/25 transition-all flex items-center justify-center space-x-2"
+              className="w-full py-3 rounded-2xl font-bold text-sm bg-gradient-to-r from-lime-400 via-lime-500 to-lime-600 hover:from-lime-300 hover:to-lime-500 text-slate-950 font-black shadow-xl shadow-lime-500/25 transition-all flex items-center justify-center space-x-2"
             >
               <span>{loading ? 'Processing...' : mode === 'register' ? 'Continue with Email Verification' : 'Sign In'}</span>
               <ArrowRight className="w-4 h-4" />
@@ -348,7 +348,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   setMode(mode === 'register' ? 'login' : 'register');
                   setError('');
                 }}
-                className="text-xs text-slate-400 hover:text-indigo-400 transition-colors font-medium"
+                className="text-xs text-slate-400 hover:text-lime-400 transition-colors font-medium"
               >
                 {mode === 'register' ? 'Already have an account? Sign In' : 'New candidate? Create account & verify'}
               </button>

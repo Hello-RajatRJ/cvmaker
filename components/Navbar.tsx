@@ -38,18 +38,18 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full glass-panel border-b border-indigo-500/10 bg-white/80 backdrop-blur-md">
+      <header className="sticky top-0 z-40 w-full glass-panel border-b border-lime-500/20 bg-white/90 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-indigo-400 p-0.5 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-lime-400 via-lime-500 to-emerald-500 p-0.5 shadow-lg shadow-lime-500/25 group-hover:scale-105 transition-transform">
               <div className="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-blue-400" />
+                <Sparkles className="w-5 h-5 text-lime-600" />
               </div>
             </div>
             <div>
-              <span className="text-lg font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-700 via-purple-600 to-indigo-500">
-                Architect<span className="text-indigo-400">AI</span>
+              <span className="text-lg font-black tracking-tight text-slate-900">
+                Architect<span className="text-lime-600">AI</span>
               </span>
               <span className="block text-[10px] font-bold text-slate-500 tracking-wider uppercase">
                 CV & LLM Workspace
@@ -61,42 +61,42 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center space-x-1">
             <Link
               href="/resume-builder"
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
                 (pathname || '').startsWith('/resume-builder')
-                  ? 'bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-sm'
-                  : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50'
+                  ? 'bg-lime-500 text-slate-950 border border-lime-400 shadow-sm shadow-lime-500/20'
+                  : 'text-slate-600 hover:text-lime-700 hover:bg-lime-50/60'
               }`}
             >
-              <FileText className="w-4 h-4 text-indigo-600" />
+              <FileText className={`w-4 h-4 ${(pathname || '').startsWith('/resume-builder') ? 'text-slate-950' : 'text-lime-600'}`} />
               <span>Resume Architect</span>
             </Link>
 
             <Link
               href="/gemini-studio"
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
                 (pathname || '').startsWith('/gemini-studio')
-                  ? 'bg-purple-50 text-purple-700 border border-purple-200 shadow-sm'
-                  : 'text-slate-600 hover:text-purple-600 hover:bg-slate-50'
+                  ? 'bg-lime-500 text-slate-950 border border-lime-400 shadow-sm'
+                  : 'text-slate-600 hover:text-lime-700 hover:bg-lime-50/60'
               }`}
             >
-              <Bot className="w-4 h-4 text-purple-600" />
+              <Bot className="w-4 h-4 text-slate-700" />
               <span>Gemini AI Studio</span>
-              <span className="px-1.5 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-700 rounded-full border border-emerald-200">
+              <span className="px-1.5 py-0.5 text-[10px] font-bold bg-lime-100 text-lime-800 rounded-full border border-lime-300">
                 FREE
               </span>
             </Link>
 
             <Link
               href="/assessment"
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
                 (pathname || '').startsWith('/assessment')
-                  ? 'bg-amber-50 text-amber-700 border border-amber-200 shadow-sm'
-                  : 'text-slate-600 hover:text-amber-600 hover:bg-slate-50'
+                  ? 'bg-lime-500 text-slate-950 border border-lime-400 shadow-sm'
+                  : 'text-slate-600 hover:text-lime-700 hover:bg-lime-50/60'
               }`}
             >
-              <Trophy className="w-4 h-4 text-amber-600" />
+              <Trophy className="w-4 h-4 text-slate-700" />
               <span>AI Mock Test</span>
-              <span className="px-1.5 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-700 rounded-full border border-amber-200">
+              <span className="px-1.5 py-0.5 text-[10px] font-bold bg-slate-100 text-slate-700 rounded-full border border-slate-200">
                 1,120 Qs
               </span>
             </Link>
@@ -106,24 +106,24 @@ export default function Navbar() {
           <div className="flex items-center space-x-3">
             {user ? (
               <div className="flex items-center space-x-2">
-                <div className="flex items-center space-x-2.5 bg-white border border-slate-200 rounded-full py-1 px-3 shadow-xs">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white text-xs">
+                <div className="flex items-center space-x-2.5 bg-white border border-lime-200 rounded-full py-1 px-3 shadow-xs">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-lime-400 to-lime-600 flex items-center justify-center font-black text-slate-950 text-xs">
                     {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
                   </div>
                   <div className="hidden sm:block text-left">
                     <p className="text-xs font-bold text-slate-900 leading-none">{user.name}</p>
-                    <p className="text-[10px] font-semibold text-indigo-600 mt-0.5 leading-none">{user.rankTitle || 'Candidate'}</p>
+                    <p className="text-[10px] font-bold text-lime-700 mt-0.5 leading-none">{user.rankTitle || 'Candidate'}</p>
                   </div>
                   {user.hasTestPass && (
                     <span title="Test Pass Active">
-                      <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                      <ShieldCheck className="w-4 h-4 text-lime-600" />
                     </span>
                   )}
                 </div>
 
                 <button
                   onClick={handleLogout}
-                  className="px-3 py-1.5 rounded-full text-xs font-semibold text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 hover:border-rose-200 transition-all flex items-center space-x-1"
+                  className="px-3 py-1.5 rounded-full text-xs font-semibold text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 hover:border-rose-200 transition-all flex items-center space-x-1 cursor-pointer"
                   title="Log out of candidate account"
                 >
                   <span>Logout</span>
@@ -132,9 +132,9 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={() => setShowAuthModal(true)}
-                className="flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg shadow-indigo-500/25 transition-all"
+                className="flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-lime-400 via-lime-500 to-lime-600 hover:from-lime-300 hover:to-lime-500 text-slate-950 shadow-md shadow-lime-500/20 transition-all cursor-pointer"
               >
-                <User className="w-4 h-4" />
+                <User className="w-4 h-4 text-slate-950" />
                 <span>Candidate Login</span>
               </button>
             )}

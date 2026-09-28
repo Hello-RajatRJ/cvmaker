@@ -3,76 +3,127 @@
 @tailwind utilities;
 
 :root {
-  --background: #f8fafc;
+  --background: #fbfdf9;
   --foreground: #0f172a;
-  --card-bg: rgba(255, 255, 255, 0.7);
-  --card-border: rgba(99, 102, 241, 0.1);
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --card-border: rgba(132, 204, 22, 0.22);
+  --accent-lime: #84cc16;
+  --accent-lime-deep: #65a30d;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: 'Calibri', 'Carlito', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   overflow-x: hidden;
-  /* Faint dot pattern like the portfolio */
-  background-image: radial-gradient(rgba(99, 102, 241, 0.15) 1px, transparent 1px);
-  background-size: 20px 20px;
+  /* Crisp clean white background with subtle lime green radial micro-pattern */
+  background-image: radial-gradient(rgba(132, 204, 22, 0.16) 1px, transparent 1px);
+  background-size: 22px 22px;
 }
 
-/* Glassmorphism containers */
+/* Glassmorphism containers with lime green aesthetics */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(99, 102, 241, 0.15);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(132, 204, 22, 0.22);
+  box-shadow: 0 4px 24px rgba(101, 163, 13, 0.07);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(99, 102, 241, 0.15);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(132, 204, 22, 0.2);
+  box-shadow: 0 8px 30px 0 rgba(101, 163, 13, 0.06);
 }
 
 .glass-card:hover {
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.15);
+  border-color: rgba(132, 204, 22, 0.55);
+  box-shadow: 0 14px 44px 0 rgba(132, 204, 22, 0.2);
 }
 
-/* Scrollbar styles */
+/* Lime Scrollbar styles */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
-  background: rgba(241, 245, 249, 0.6);
+  background: rgba(247, 254, 231, 0.6);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: rgba(99, 102, 241, 0.4);
+  background: rgba(132, 204, 22, 0.55);
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.7);
+  background: rgba(101, 163, 13, 0.85);
 }
 
 /* Print Styles for high-res PDF export */
 @media print {
+  @page {
+    size: A4;
+    margin: 12mm 15mm;
+  }
+
   body {
     background: white !important;
     color: black !important;
   }
-  .no-print {
+
+  nav,
+  header,
+  footer,
+  .no-print,
+  .lg\:col-span-5 {
     display: none !important;
   }
+
   .print-only {
     display: block !important;
   }
+
   .resume-paper {
     box-shadow: none !important;
     border: none !important;
     margin: 0 !important;
+    padding: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
+    min-height: auto !important;
+    overflow: visible !important;
   }
+
+  .resume-paper h2,
+  .resume-paper h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .resume-paper div,
+  .resume-paper li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* Fade In animation for tab transitions */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Hide scrollbar but keep scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -2,160 +2,171 @@ import { ResumeData } from '../types/resume';
 
 export const SAMPLE_RESUME_DATA: ResumeData = {
   contact: {
-    fullName: "Alex Rivera",
-    jobTitle: "Senior Full-Stack & Cloud Architect",
-    email: "alex.rivera@architect.dev",
-    phone: "+1 (555) 234-5678",
-    location: "San Francisco, CA",
-    website: "https://alexrivera.dev",
-    linkedin: "linkedin.com/in/alexrivera-architect",
-    github: "github.com/alexrivera-dev",
-    summary: "High-impact Lead Software Architect with 8+ years building enterprise microservices, AI-driven automation pipelines, and high-frequency real-time web applications. Expert in React 19, Next.js 15, Node.js, TypeScript, and AWS Cloud Native infrastructure."
+    fullName: "Rajat Ambedkar",
+    jobTitle: "Senior Full Stack Engineer & UI Architect",
+    email: "",
+    phone: "",
+    location: "Azad Nagar, Ambala Cantt, Haryana",
+    website: "https://rj-ambedkar-portfolio.netlify.app/",
+    linkedin: "",
+    github: "github.com/HelloRajatRJ",
+    summary: "High-performing Senior Full Stack Engineer & UI Architect specializing in React, TypeScript, JavaScript, Node.js. Demonstrated track record of architecting scalable web applications, optimizing system performance and delivering business-critical features. Proven leader in agile, fast-paced engineering environments."
   },
   experience: [
     {
       id: "exp-1",
-      company: "Apex Cloud Innovations",
-      position: "Lead Full-Stack Architect",
-      location: "San Francisco, CA",
-      startDate: "2022-03",
+      company: "Seasia Infotech Pvt Ltd",
+      position: "Software Engineer / Full Stack Developer",
+      employmentType: "Full-time",
+      location: "Mohali, Punjab, India",
+      startDate: "May 2022",
       endDate: "Present",
       current: true,
       highlights: [
-        "Architected distributed Next.js 15 & Node.js microservices handling 4.2M daily active API requests with 99.99% uptime.",
-        "Integrated Google Gemini LLM pipelines for automated log analysis, cutting incident root-cause triage time by 64%.",
-        "Pioneered zero-downtime CI/CD Kubernetes deployments using Docker, Terraform, and GitHub Actions.",
-        "Mentored team of 14 senior engineers across frontend, backend, and DevOps domains."
+        "Spearheaded production platform features using React, driving increase in operational throughput and user engagement.",
+        "Collaborated cross-functional engineering teams to implement TypeScript and automated testing workflows.",
+        "Optimized system latency and front-end render performance enforcing strict standards and modern web vitals benchmarks."
       ]
     },
     {
       id: "exp-2",
-      company: "Vanguard Tech Labs",
-      position: "Senior React & Node Engineer",
-      location: "Austin, TX",
-      startDate: "2019-06",
-      endDate: "2022-02",
+      company: "Solitaire Infosys",
+      position: "Software Engineer Trainee",
+      employmentType: "Full-time",
+      location: "Mohali, India",
+      startDate: "Mar 2021",
+      endDate: "Apr 2022",
       current: false,
       highlights: [
-        "Engineered real-time analytics dashboard in React & WebSockets reducing end-to-end data latency from 3.2s to 120ms.",
-        "Refactored legacy REST monolithic architecture into modular GraphQL APIs, boosting mobile app response times by 45%.",
-        "Built automated ATS candidate screening tool with custom keyword extraction engine."
-      ]
-    },
-    {
-      id: "exp-3",
-      company: "Quantum Systems Inc",
-      position: "Full-Stack Software Developer",
-      location: "San Jose, CA",
-      startDate: "2017-06",
-      endDate: "2019-05",
-      current: false,
-      highlights: [
-        "Developed responsive single-page applications using React, Redux, and TypeScript.",
-        "Implemented secure JWT authentication & OAuth2 integration for enterprise customer portal."
+        "Drove platform development driving a 35% increase in throughput and user engagement.",
+        "Collaborated across cross-functional engineering teams to implement JavaScript and automated testing workflows.",
+        "Optimized system latency and front-end render performance by enforcing strict coding standards and modern web vitals benchmarks."
       ]
     }
   ],
   education: [
     {
       id: "edu-1",
-      institution: "University of California, Berkeley",
-      degree: "B.S. in Computer Science & Engineering",
-      fieldOfStudy: "Computer Science",
-      startDate: "2013-08",
-      endDate: "2017-05",
-      gpa: "3.88 / 4.0",
-      highlights: [
-        "Deans Honor List 6 Consecutive Semesters",
-        "President of ACM Competitive Programming Chapter"
-      ]
-    },
-    {
-      id: "edu-2",
-      institution: "Stanford University (Executive Online)",
-      degree: "Certificate in Cloud Architecture & System Design",
-      fieldOfStudy: "Distributed Systems",
-      startDate: "2020-01",
-      endDate: "2020-06",
-      highlights: [
-        "Specialized in high-scalability cloud infrastructure and event-driven architecture."
-      ]
+      institution: "Chandigarh University",
+      degree: "Bachelors of Computer Application (BCA)",
+      fieldOfStudy: "Computer Science & Software Engineering",
+      startDate: "",
+      endDate: "",
+      gpa: "",
+      highlights: []
     }
   ],
   projects: [
     {
       id: "proj-1",
-      name: "Resume Architect & AI Optimizer",
-      role: "Lead Full-Stack Architect",
-      startDate: "2024-01",
-      endDate: "Present",
-      link: "https://resume-architect.dev",
-      repoLink: "https://github.com/alexrivera-dev/resume-architect",
-      technologies: ["Next.js 15", "TypeScript", "Gemini AI", "Tailwind CSS", "PDF.js"],
-      description: "AI-powered candidate CV optimization suite with real-time ATS match scoring, PDF parsing, and multi-template renderer.",
+      name: "CereTax - Tax Compliance Platform",
+      role: "Full-Stack Developer",
+      startDate: "Jan 2023",
+      endDate: "Apr 2026",
+      link: "",
+      repoLink: "",
+      technologies: ["React", "TypeScript", "JavaScript", "Node.js", "AWS", "Tailwind CSS", "React-Admin"],
+      description: "Engineered CereTax — Cloud-Native Tax Compliance platform leveraging React, TypeScript, JavaScript & Node.js to solve enterprise challenges, guarantee user experience, and deliver fast API response times.",
       highlights: [
-        "Analyzes CVs against target Job Descriptions using Gemini 1.5 Flash.",
-        "Real-time ATS score gauge calculation with action-driven bullet suggestions.",
-        "Integrated Razorpay microtransactions for template unlocking and candidate passes."
+        "Architected scalable core modules with React following clean code design patterns.",
+        "Implemented automated testing and deployment for TypeScript services.",
+        "Developed reusable React components and responsive layouts using Tailwind CSS."
       ]
     },
     {
       id: "proj-2",
-      name: "Distributed Mock Test Arena",
-      role: "Principal Backend Engineer",
-      startDate: "2023-06",
-      endDate: "2023-12",
-      link: "https://mocktest-arena.dev",
-      repoLink: "https://github.com/alexrivera-dev/mock-test-arena",
-      technologies: ["React", "Node.js", "Express", "MongoDB", "Razorpay"],
-      description: "Proctored technical assessment engine covering 16 stacks with daily question shuffling and PDF rank certification.",
+      name: "Wesellrestaurants",
+      role: "Frontend Developer",
+      startDate: "Jun 2024",
+      endDate: "Oct 2024",
+      link: "",
+      repoLink: "",
+      technologies: ["React JS", "Next.js", "TypeScript", "PHP", "Laravel", "AWS", "Bootstrap"],
+      description: "Worked on both the public-facing website and Admin panel using Next.js. Developed responsive UI, reusable components, API integrations, form handling, data management and performance-focused features for the restaurant buying, selling, and leasing platform.",
       highlights: [
-        "1,120 comprehensive question bank across 16 core technology domains.",
-        "Proctored timer, navigator grid, topic metrics, and automated PDF certification."
+        "Developed the public-facing restaurant marketplace using Next.js and React.js.",
+        "Implemented authentication and role-based access admin functionality.",
+        "Built and maintained a feature-rich Admin panel for platform data and operations."
+      ]
+    },
+    {
+      id: "proj-3",
+      name: "HyeConnect",
+      role: "Full Stack Lead Developer",
+      startDate: "Mar 2024",
+      endDate: "Dec 2024",
+      link: "",
+      repoLink: "",
+      technologies: ["Nuxt", "Tailwind", "GraphQL", "Node", "AWS Amplify"],
+      description: "HyeConnect is a community and collaboration platform designed to connect users, communities, and organizations. The platform provides features for creating and managing groups, discussions, tasks, events, and user interactions.",
+      highlights: [
+        "Implemented user profiles, groups, forums, tasks, and event management features.",
+        "Optimized application performance across responsive devices.",
+        "Implemented forms validations, CRUD operations, and interactive workflows."
+      ]
+    },
+    {
+      id: "proj-4",
+      name: "iallo - Web Chrome Extension",
+      role: "Senior Lead Developer",
+      startDate: "",
+      endDate: "",
+      link: "",
+      repoLink: "",
+      technologies: ["React", "Chrome Extension API", "JavaScript"],
+      description: "iallo is a hospitality technology platform that helps hotels enhance the guest experience by providing digital tools and services for communication, travel information, and guest engagement.",
+      highlights: [
+        "Built reusable and scalable UI components for different hospitality use cases.",
+        "Collaborated with backend developers to deliver new features and enhancements.",
+        "Implemented responsive layouts for desktop, tablet, and mobile devices."
       ]
     }
   ],
   skills: [
     {
       id: "skill-1",
-      category: "Frontend Stack",
-      skills: ["React 19", "Next.js (App Router)", "TypeScript", "Tailwind CSS", "Redux Toolkit", "GraphQL", "HTML5/CSS3"]
+      category: "Frontend",
+      skills: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Zustand", "HTML5/CSS3", "JavaScript", "Agile", "Testing"]
     },
     {
       id: "skill-2",
-      category: "Backend & Cloud",
-      skills: ["Node.js", "Express", "Python", "AWS (EC2, S3, Lambda)", "Docker", "Kubernetes", "PostgreSQL", "MongoDB", "Redis"]
+      category: "Tools & Testing",
+      skills: ["Git", "Vite", "Webpack", "Jest", "Cypress", "CI/CD Pipelines", "Figma", "Postman"]
     },
     {
       id: "skill-3",
-      category: "AI & Architectures",
-      skills: ["Gemini AI SDK", "REST & GraphQL APIs", "Microservices", "CI/CD Pipelines", "System Design", "JWT Auth"]
+      category: "Backend & Cloud",
+      skills: ["Node.js", "Express", "Python", "PostgreSQL", "Docker", "AWS (Lambda)", "Redis"]
     },
     {
       id: "skill-4",
-      category: "DevOps & Tools",
-      skills: ["Git", "GitHub Actions", "Terraform", "Jest", "Cypress", "Webpack", "Vite"]
+      category: "Beginner Skills",
+      skills: ["Java", "Golang (Go)", "Spring Boot", "Three.js", "Python"]
     }
   ],
   certifications: [
     {
       id: "cert-1",
-      name: "AWS Certified Solutions Architect – Professional",
-      issuer: "Amazon Web Services",
-      date: "2023-11"
-    },
-    {
-      id: "cert-2",
-      name: "Certified Kubernetes Application Developer (CKAD)",
-      issuer: "Linux Foundation",
-      date: "2022-08"
-    },
-    {
-      id: "cert-3",
-      name: "Google Cloud Certified Professional Cloud Architect",
-      issuer: "Google Cloud",
-      date: "2021-04"
+      name: "Certificate of Appreciation",
+      issuer: "Seasia Infotech Services",
+      date: "2025"
     }
   ],
-  sectionOrder: ['summary', 'experience', 'education', 'projects', 'skills', 'certifications']
+  languages: [],
+  awards: [],
+  publications: [],
+  volunteer: [],
+  sectionOrder: ['summary', 'experience', 'education', 'projects', 'skills', 'certifications', 'languages', 'awards', 'publications', 'volunteer'],
+  visibleSections: {
+    summary: true,
+    experience: true,
+    education: true,
+    projects: true,
+    skills: true,
+    certifications: true,
+    languages: false,
+    awards: false,
+    publications: false,
+    volunteer: false,
+  }
 };
